@@ -1,0 +1,15 @@
+#!/bin/bash
+dir="/home/blog/video";
+cd $dir;
+url=$1;
+id=`echo $url | cut -d"=" -f2`
+echo "http://img.youtube.com/vi/$id/0.jpg"
+echo $url
+movgrab -T $url 2>/tmp/movgrab;
+mp4=`grep "mp4" /tmp/movgrab | sed -e "s/\(mp4:[0-9]*x[0-9]*\)/#\1#/" | cut -d'#' -f2`;
+echo "movgrab -f $mp4 $url";
+movgrab -f $mp4 $url;
+webm=`grep "webm" /tmp/movgrab | sed -e "s/\(webm:[0-9]*x[0-9]*\)/#\1#/" | cut -d'#' -f2`;
+echo "movgrab -f $webm $url";
+movgrab -f $webm $url;
+chown 33.33 ${dir}/*;
